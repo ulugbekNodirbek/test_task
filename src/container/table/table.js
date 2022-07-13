@@ -14,6 +14,9 @@ import axios from "axios";
 import { table_data } from "../../redux/action/actions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+
+
+
 const EditableCell = ({
   editing,
   dataIndex,
@@ -49,6 +52,8 @@ const EditableCell = ({
     </td>
   );
 };
+
+
 const TableListBlock = ({ proArr, setProArr }) => {
   const [visible, setVisible] = useState(false);
 
@@ -61,11 +66,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
   useEffect(() => {
     axios
       .get(`http://23.88.43.148/users`, {
-        headers: {
-          Authorization: `Bearer ${"token"}`,
-          "Content-type": "applicaiton/json",
-          Accept: "application/json",
-        },
       })
 
       .then(function (response) {
@@ -73,8 +73,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
         setProArr(response.data);
         setData(response.data);
       })
-
-      // .catch(function (error) {});
   }, [post]);
   
   
@@ -82,9 +80,9 @@ const TableListBlock = ({ proArr, setProArr }) => {
   const handleSubmit = (e) => {
     axios
       .post("http://23.88.43.148/users", {
-        Name: e.Name,
-        Surname: e.Surname,
-        Desc: e.Desc,
+        name: e.name,
+        surname: e.surname,
+        desc: e.desc,
       })
       .then((res) => setPost(res));
 
@@ -104,9 +102,9 @@ const TableListBlock = ({ proArr, setProArr }) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      Name: "",
-      Surname: "",
-      Desc: "",
+      name: "",
+      surname: "",
+      desc: "",
       ...record,
     });
     setEditingKey(record._id);
@@ -115,8 +113,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
   const cancel = () => {
     setEditingKey("");
   };
-
-  // const [items, setItems] = useState(proArr);
   const deleteItem = (index) => {
     axios.delete(
         `http://23.88.43.148/user/${index}`,
@@ -124,8 +120,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
         ).then(e => setPost(e))
   } 
 ;
-
-
   const save = async (key) => {
     try {
       const row = await form.validateFields();
@@ -155,6 +149,7 @@ const TableListBlock = ({ proArr, setProArr }) => {
       console.log("Validate Failed:", errInfo);
     }
   };
+
 
   const columns = [
     {
@@ -239,6 +234,7 @@ const TableListBlock = ({ proArr, setProArr }) => {
           pagination={{
             onChange: cancel,
           }}
+          
         />
       </Form>
 
@@ -257,10 +253,10 @@ const TableListBlock = ({ proArr, setProArr }) => {
         <Form
           name="basic"
           labelCol={{
-            span: 8,
+            span: 5,
           }}
           wrapperCol={{
-            span: 16,
+            span: 10,
           }}
           initialValues={{
             remember: true,
@@ -272,8 +268,8 @@ const TableListBlock = ({ proArr, setProArr }) => {
         >
         
           <Form.Item
-            label="Name"
-            name="Name"
+            label="name"
+            name="name"
             rules={[
               {
                 required: true,
@@ -285,8 +281,8 @@ const TableListBlock = ({ proArr, setProArr }) => {
           </Form.Item>
 
           <Form.Item
-            label="Surname"
-            name="Surname"
+            label="surname"
+            name="surname"
             rules={[
               {
                 required: true,
@@ -298,8 +294,8 @@ const TableListBlock = ({ proArr, setProArr }) => {
           </Form.Item>
 
           <Form.Item
-            label="Desc"
-            name="Desc"
+            label="desc"
+            name="desc"
             rules={[
               {
                 required: true,
