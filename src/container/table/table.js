@@ -82,9 +82,9 @@ const TableListBlock = ({ proArr, setProArr }) => {
   const handleSubmit = (e) => {
     axios
       .post("http://23.88.43.148/users", {
-        name: e.Name,
-        surname: e.Surname,
-        desc: e.Desc,
+        Name: e.Name,
+        Surname: e.Surname,
+        Desc: e.Desc,
       })
       .then((res) => setPost(res));
 
@@ -104,9 +104,9 @@ const TableListBlock = ({ proArr, setProArr }) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      name: "",
-      surname: "",
-      desc: "",
+      Name: "",
+      Surname: "",
+      Desc: "",
       ...record,
     });
     setEditingKey(record._id);
