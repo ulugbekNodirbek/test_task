@@ -15,8 +15,6 @@ import { table_data } from "../../redux/action/actions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-
-
 const EditableCell = ({
   editing,
   dataIndex,
@@ -53,29 +51,22 @@ const EditableCell = ({
   );
 };
 
-
-const TableListBlock = ({ proArr, setProArr }) => {
+const TableListBlock = ({ proArr }) => {
   const [visible, setVisible] = useState(false);
 
-  const [data, setData] = useState(proArr);
   const [post, setPost] = useState([]);
-  const dispatch = useDispatch()
-  const tableData = useSelector(state => state.data.data)
+  const dispatch = useDispatch();
+  const tableData = useSelector((state) => state.data.data);
   const [form] = Form.useForm();
 
   useEffect(() => {
     axios
-      .get(`http://23.88.43.148/users`, {
-      })
+      .get(`http://23.88.43.148/users`, {})
 
       .then(function (response) {
         dispatch(table_data(response.data));
-        setProArr(response.data);
-        setData(response.data);
-      })
+      });
   }, [post]);
-  
-  
 
   const handleSubmit = (e) => {
     axios
@@ -87,10 +78,7 @@ const TableListBlock = ({ proArr, setProArr }) => {
       .then((res) => setPost(res));
 
     form.resetFields();
-
-    
   };
-
 
   const [editingKey, setEditingKey] = useState("");
 
@@ -114,43 +102,38 @@ const TableListBlock = ({ proArr, setProArr }) => {
     setEditingKey("");
   };
   const deleteItem = (index) => {
-    axios.delete(
-        `http://23.88.43.148/user/${index}`,
-        
-        ).then(e => setPost(e))
-  } 
-;
+    axios.delete(`http://23.88.43.148/user/${index}`).then((e) => setPost(e));
+  };
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      const newData = [...proArr];
+      const newData = [...tableData];
       const index = newData.findIndex((item) => key === item._id);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        axios.put(
-          `http://23.88.43.148/user/${newData[index].user_id}`,
-          JSON.stringify(row),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        axios
+          .put(
+            `http://23.88.43.148/user/${newData[index].user_id}`,
+            JSON.stringify(row),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((res) => setPost(res));
 
         setEditingKey("");
       } else {
         newData.push(row);
-        setData(newData);
+        dispatch(table_data(newData));
         setEditingKey("");
       }
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
     }
   };
-
-
   const columns = [
     {
       title: "name",
@@ -188,13 +171,16 @@ const TableListBlock = ({ proArr, setProArr }) => {
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
               <a>Cancel</a>
             </Popconfirm>
-         
           </span>
         ) : (
-            <>
-          <Typography.Link onClick={() => edit(record)}>Edit</Typography.Link>
-            <Button style={{marginLeft:'10px'}} type="danger" onClick={() => deleteItem(record.user_id)}>
-                  delete
+          <>
+            <Typography.Link onClick={() => edit(record)}>Edit</Typography.Link>
+            <Button
+              style={{ marginLeft: "10px" }}
+              type="danger"
+              onClick={() => deleteItem(record.user_id)}
+            >
+              delete
             </Button>
           </>
         );
@@ -234,7 +220,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
           pagination={{
             onChange: cancel,
           }}
-          
         />
       </Form>
 
@@ -266,7 +251,6 @@ const TableListBlock = ({ proArr, setProArr }) => {
           autoComplete="off"
           form={form}
         >
-        
           <Form.Item
             label="name"
             name="name"
